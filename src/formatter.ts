@@ -24,15 +24,15 @@ export function formatHTMLInDirectory(inDir: string, imageSizesMap: Map<string, 
 
         content.querySelectorAll("img").forEach((img) => {
             const imagePath = path.join(inDir, img.attributes.src)
-
-            const lastFolderIndex = imagePath.lastIndexOf("/")
-            const imageFolder = path.join(imagePath.slice(0, lastFolderIndex), "qdsrcset-generated")
-            const imageName = imagePath.slice(lastFolderIndex, imagePath.length)
-
             const sizes = imageSizesMap.get(imagePath)
             if (sizes == undefined) {
                 throw `Could not find image ${imagePath} in internal database. Did you ignore a folder where the image is located?`
             }
+
+
+            const lastFolderIndex = img.attributes.src.lastIndexOf("/")
+            const imageFolder = path.join(img.attributes.src.slice(0, lastFolderIndex), "qdsrcset-generated")
+            const imageName = img.attributes.src.slice(lastFolderIndex, img.attributes.src.length)
 
             let srcset = ""
 
