@@ -37,10 +37,11 @@ export function formatHTMLInDirectory(inDir: string, imageSizesMap: Map<string, 
             let srcset = ""
 
             for (const size of sizes) {
-                srcset = srcset + createFilePath(imageFolder, imageName, size) + " " + size + "w "
+                srcset = srcset + createFilePath(imageFolder, imageName, size) + " " + size + "w, "
             }
 
             img.setAttribute("srcset", srcset)
+            img.setAttribute("src", "")
         })
 
         fs.rmSync(filepath)
