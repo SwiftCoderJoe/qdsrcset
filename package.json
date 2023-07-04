@@ -15,6 +15,10 @@
     "bin"
   ],
   "author": "SwiftCoderJoe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swiftcoderjoe/qdsrcset.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.3.2",
