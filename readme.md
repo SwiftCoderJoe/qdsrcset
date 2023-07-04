@@ -23,6 +23,10 @@ Next, create a configuration file in either your project's root or in a `config/
 }
 ```
 
+Then, tell NPM to run the program:
+
+`npx qdsrcset`
+
 This will format a site located in `inDir` and place the formatted site in `outDir`. Don't make these the same folder. 
 
 That's it! It's certainly quick, hopefully not *too* dirty (and getting less dirty) srcset for each of your website's images!
