@@ -3,14 +3,22 @@ import path from "path"
 import parser from "node-html-parser"
 import { createFilePath } from "./imageResizer"
 
-export function formatHTMLInDirectory(inDir: string, imageSizesMap: Map<string, number[]>) {
+export function formatHTMLInDirectory(inDir: string, ignore: string[], imageSizesMap: Map<string, number[]>) {
     const src = fs.readdirSync(inDir)
 
     for (const file of src) {
         const filepath = path.join(inDir, file)
+
+        if (ignore.some((ignored) => { 
+            return ignored == filepath 
+        })) {
+            console.log(`\x1b[33mSkipping ignored file or directory ${filepath}\x1b[0m`)
+            continue
+        }
+
         if (fs.lstatSync(filepath).isDirectory()) {
             console.log(`Descending into directory ${file}`)
-            formatHTMLInDirectory(filepath, imageSizesMap)
+            formatHTMLInDirectory(filepath, ignore, imageSizesMap)
             continue;
         }
 

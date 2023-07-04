@@ -1,1 +1,1 @@
-* add ignore folders
+* different logging levels

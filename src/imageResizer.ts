@@ -2,25 +2,29 @@ import fs from "fs"
 import path from "path"
 import sharp from "sharp"
 
-export default async function createResizedImagesInDirectory(imgDir: string, sizes: [number]): Promise<Map<string, number[]>> {
+export default async function createResizedImagesInDirectory(imgDir: string, ignore: string[], sizes: number[]): Promise<Map<string, number[]>> {
     const src = fs.readdirSync(imgDir)
     let outputMap = new Map<string, number[]>()
+    let inProgressDirs: Promise<Map<string, number[]>>[] = [] 
 
     for (const fileName of src) {
         const filepath = path.join(imgDir, fileName)
-        if (fs.lstatSync(filepath).isDirectory()) {
-            console.log(`Descending into directory ${fileName}`)
-            const dirMap = await createResizedImagesInDirectory(filepath, sizes)
-            dirMap.forEach((v, k) => {
-                outputMap.set(k, v)
-            })
-            continue;
+
+        if (ignore.some((ignored) => { 
+            return ignored == filepath 
+        })) {
+            console.log(`\x1b[33mSkipping ignored file or directory ${filepath}\x1b[0m`)
+            continue
         }
 
-        console.log(`checking if file ${fileName} is an image`)
-
+        if (fs.lstatSync(filepath).isDirectory()) {
+            console.log(`Descending into directory ${fileName}`)
+            inProgressDirs.push(createResizedImagesInDirectory(filepath, ignore, sizes))
+            continue
+        }
+        
         if (!isImage(filepath)) {
-            continue;
+            continue
         }
 
         console.log(`Found image file ${filepath}`)
@@ -45,6 +49,9 @@ export default async function createResizedImagesInDirectory(imgDir: string, siz
                 sharp(filepath)
                     .resize(imgWidth)
                     .toFile(newFilePath)
+                    .catch((err) => {
+                        throw `Couldn't create resized image at ${newFilePath}`
+                    })
 
                 outputMap.set(filepath, sizes.slice(0, idx).concat([imgWidth]))
                 break
@@ -53,11 +60,20 @@ export default async function createResizedImagesInDirectory(imgDir: string, siz
             sharp(filepath)
                 .resize(size)
                 .toFile(newFilePath)
+                .catch((err) => {
+                    throw `Couldn't create resized image at ${newFilePath}`
+                })
 
             idx++
         }
 
     }
+
+    (await Promise.all(inProgressDirs)).forEach((map) => {
+        map.forEach((v, k) => {
+            outputMap.set(k, v)
+        })
+    })
 
     return outputMap
 }
