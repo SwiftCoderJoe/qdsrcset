@@ -42,6 +42,7 @@ export default async function createResizedImagesInDirectory(imgDir: string, ign
         }
 
         let idx = 0
+        let endedEarly = false
 
         for (const size of sizes) {
             if (size > imgWidth) {
@@ -53,7 +54,8 @@ export default async function createResizedImagesInDirectory(imgDir: string, ign
                         throw `Couldn't create resized image at ${newFilePath}`
                     })
 
-                outputMap.set(filepath, sizes.slice(0, idx).concat([imgWidth]))
+                endedEarly = true
+                
                 break
             }
             const newFilePath = createFilePath(generatedImageDir, fileName, size)
@@ -66,6 +68,8 @@ export default async function createResizedImagesInDirectory(imgDir: string, ign
 
             idx++
         }
+
+        outputMap.set(filepath, sizes.slice(0, idx).concat(endedEarly ? [imgWidth] : sizes[sizes.length - 1]))
 
     }
 
