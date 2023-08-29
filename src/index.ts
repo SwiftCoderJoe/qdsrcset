@@ -55,4 +55,5 @@ import path from "path"
     console.log("\x1b[32mDone!\x1b[0m")
 }).catch((err) => {
     console.error("\x1b[31mError: %s\x1b[0m", err)
+    process.exit(1)
 })
