@@ -1,6 +1,6 @@
 {
   "name": "qdsrcset",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Quick and Dirty Srcset",
   "bin": {
     "qdsrcset": "./bin/qdsrcset.js"
