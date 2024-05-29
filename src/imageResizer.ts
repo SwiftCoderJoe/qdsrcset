@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import sharp from "sharp"
+import { isImage } from "./isImage"
 
 export default async function createResizedImagesInDirectory(imgDir: string, ignore: string[], sizes: number[]): Promise<Map<string, number[]>> {
     const src = fs.readdirSync(imgDir)
@@ -80,14 +81,6 @@ export default async function createResizedImagesInDirectory(imgDir: string, ign
     })
 
     return outputMap
-}
-
-function isImage(file: string) {
-    // Purposefully ignore SVGs here because it seems unnecessary to resize them.
-    return [".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".tiff"]
-        .some((extension) => {
-            return file.toLowerCase().endsWith(extension)
-        })
 }
 
 export function createFilePath(generatedImageDir: string, originalFile: string, size: number): string {

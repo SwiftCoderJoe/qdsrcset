@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 import parser from "node-html-parser"
 import { createFilePath } from "./imageResizer"
+import { isImage } from "./isImage"
 
 export function formatHTMLInDirectory(inDir: string, ignore: string[], imageSizesMap: Map<string, number[]>) {
     const src = fs.readdirSync(inDir)
@@ -32,6 +33,7 @@ export function formatHTMLInDirectory(inDir: string, ignore: string[], imageSize
 
         content.querySelectorAll("img").forEach((img) => {
             const imagePath = path.join(inDir, img.attributes.src)
+            if (!isImage(imagePath)) { return }
             const sizes = imageSizesMap.get(imagePath)
             if (sizes == undefined) {
                 throw `Could not find image ${imagePath} in internal database. Did you ignore a folder where the image is located?`
