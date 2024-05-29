@@ -1,6 +1,6 @@
 {
   "name": "qdsrcset",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Quick and Dirty Srcset",
   "bin": {
     "qdsrcset": "./bin/qdsrcset.js"
@@ -21,11 +21,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^20.3.2",
+    "@types/node": "^20.12.12",
     "typescript": "^5.1.6"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",
+    "fp-ts": "^2.16.6",
     "io-ts": "^2.2.20",
     "node-html-parser": "^6.1.5",
     "sharp": "^0.32.1"
